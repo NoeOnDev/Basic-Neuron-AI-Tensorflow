@@ -4,6 +4,7 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #f5f5f5;
 }
+
 .container {
     display: flex;
     justify-content: center;
@@ -16,6 +17,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-bottom: 4rem;
 }
 
 .sub-section-1 {
@@ -32,9 +34,8 @@ body {
     font-weight: 700;
     color: #000;
     text-align: center;
-    margin-bottom: 2rem;
     max-width: 1000px;
-    min-height: 40px;
+    cursor: pointer;
 }
 
 

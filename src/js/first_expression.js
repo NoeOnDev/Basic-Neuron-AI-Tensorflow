@@ -34,13 +34,13 @@ function generarAutomata() {
     }
 
     for (let i = 0; i <= cadena.length; i++) {
-        estados.push({id: 'q' + i, x: 100 + 200 * i, y: 300, inicial: i === 0, final: i === cadena.length});
+        estados.push({id: 'q' + i, x: 100 + 200 * i, y: 40, inicial: i === 0, final: i === cadena.length});
         if (i > 0) {
             transiciones.push({from: 'q' + (i-1), to: 'q' + i, label: cadena[i-1]});
         }
     }
     let maxX = Math.max(...estados.map(estado => estado.x)) + 100;
-    let maxY = Math.max(...estados.map(estado => estado.y)) + 100;
+    let maxY = Math.max(...estados.map(estado => estado.y)) + 40;
 
     let svg = d3.select("#automata")
         .attr("width", maxX)
