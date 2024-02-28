@@ -1,3 +1,4 @@
+// Expresión regular numero #1
 function esValida(cadena) {
     let estadoActual = 'q0';
     const transiciones = {
@@ -109,4 +110,3 @@ function generarAutomata() {
 }
 
 document.getElementById('generar').addEventListener('click', generarAutomata);
-
