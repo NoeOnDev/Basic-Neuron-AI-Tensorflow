@@ -78,18 +78,31 @@ function generarAutomata() {
         .attr("text-anchor", "middle")
         .attr("dy", ".35em");
     
-        let radio = 30;
-    
-        let arista = svg.selectAll("line")
-            .data(transiciones)
-            .enter()
-            .append("line")
-            .attr("x1", d => estados.find(estado => estado.id === d.from).x + radio * Math.cos(Math.atan2(estados.find(estado => estado.id === d.to).y - estados.find(estado => estado.id === d.from).y, estados.find(estado => estado.id === d.to).x - estados.find(estado => estado.id === d.from).x)))
-            .attr("y1", d => estados.find(estado => estado.id === d.from).y + radio * Math.sin(Math.atan2(estados.find(estado => estado.id === d.to).y - estados.find(estado => estado.id === d.from).y, estados.find(estado => estado.id === d.to).x - estados.find(estado => estado.id === d.from).x)))
-            .attr("x2", d => estados.find(estado => estado.id === d.to).x - radio * Math.cos(Math.atan2(estados.find(estado => estado.id === d.to).y - estados.find(estado => estado.id === d.from).y, estados.find(estado => estado.id === d.to).x - estados.find(estado => estado.id === d.from).x)))
-            .attr("y2", d => estados.find(estado => estado.id === d.to).y - radio * Math.sin(Math.atan2(estados.find(estado => estado.id === d.to).y - estados.find(estado => estado.id === d.from).y, estados.find(estado => estado.id === d.to).x - estados.find(estado => estado.id === d.from).x)))
-            .style("stroke", "#000")
-            .style("stroke-width", 2);
+    let radio = 30;
+    svg.append("defs").append("marker")
+        .attr("id", "arrow")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 8)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+    .append("path")
+        .attr("d", "M0,-5L10,0L0,5")
+        .style("fill", "#000");
+
+    let arista = svg.selectAll("line")
+        .data(transiciones)
+        .enter()
+        .append("line")
+        .attr("x1", d => estados.find(estado => estado.id === d.from).x + radio * Math.cos(Math.atan2(estados.find(estado => estado.id === d.to).y - estados.find(estado => estado.id === d.from).y, estados.find(estado => estado.id === d.to).x - estados.find(estado => estado.id === d.from).x)))
+        .attr("y1", d => estados.find(estado => estado.id === d.from).y + radio * Math.sin(Math.atan2(estados.find(estado => estado.id === d.to).y - estados.find(estado => estado.id === d.from).y, estados.find(estado => estado.id === d.to).x - estados.find(estado => estado.id === d.from).x)))
+        .attr("x2", d => estados.find(estado => estado.id === d.to).x - radio * Math.cos(Math.atan2(estados.find(estado => estado.id === d.to).y - estados.find(estado => estado.id === d.from).y, estados.find(estado => estado.id === d.to).x - estados.find(estado => estado.id === d.from).x)))
+        .attr("y2", d => estados.find(estado => estado.id === d.to).y - radio * Math.sin(Math.atan2(estados.find(estado => estado.id === d.to).y - estados.find(estado => estado.id === d.from).y, estados.find(estado => estado.id === d.to).x - estados.find(estado => estado.id === d.from).x)))
+        .style("stroke", "#000")
+        .style("stroke-width", 2)
+        .attr("marker-end", "url(#arrow)");
+
+            
     
     let etiquetaArista = svg.selectAll(".etiquetaArista")
         .data(transiciones)
