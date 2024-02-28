@@ -56,7 +56,8 @@ function generarAutomata() {
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)
         .style("fill", "none")
-        .style("stroke", "#000");
+        .style("stroke", "#000")
+        .style("stroke-width", 2);
     
     let etiquetaNodo = svg.selectAll("text")
         .data(estados)
@@ -106,7 +107,8 @@ function generarAutomata() {
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)
         .style("fill", "none")
-        .style("stroke", "#000");
+        .style("stroke", "#000")
+        .style("stroke-width", 2);
 }
 
 document.getElementById('generar').addEventListener('click', generarAutomata);

@@ -12,6 +12,21 @@ body {
     min-height: 100vh;
 }
 
+.section-1 {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sub-section-1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
 #automata {
     font-size: 1rem;
     font-weight: 700;
@@ -19,7 +34,21 @@ body {
     text-align: center;
     margin-bottom: 2rem;
     max-width: 1000px;
-    min-height: 100px;
+    min-height: 40px;
+}
+
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    max-width: 1000px;
+    min-height: 10px;
+}
+
+p {
+  margin-bottom: 2rem;
 }
 
 .input {
@@ -41,7 +70,6 @@ body {
   }
 
   button {
-    /* Variables */
     --button_radius: 0.75em;
     --button_color: #e8e8e8;
     --button_outline_color: #000000;
@@ -65,11 +93,9 @@ body {
   }
   
   button:hover .button_top {
-    /* Pull the button upwards when hovered */
     transform: translateY(-0.33em);
   }
   
   button:active .button_top {
-    /* Push the button downwards when pressed */
     transform: translateY(0);
   }
