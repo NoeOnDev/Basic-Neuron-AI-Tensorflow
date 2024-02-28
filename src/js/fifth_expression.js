@@ -1,8 +1,26 @@
 // Expresión regular numero #3
 function esValida(cadena) {
-    const regex = /^[Rr](?:[Oo]{0,4})?(?:[Mm]{0,4})?(?:[Nn]{0,4})?$/;
+    if (cadena[0].toLowerCase() !== 'r') {
+        return false;
+    }
 
-    return regex.test(cadena);
+    let counts = { 'o': 0, 'm': 0, 'n': 0 };
+
+    for (let i = 1; i < cadena.length; i++) {
+        const caracter = cadena[i].toLowerCase();
+
+        if (caracter !== 'o' && caracter !== 'm' && caracter !== 'n') {
+            return false;
+        }
+
+        counts[caracter]++;
+
+        if (counts[caracter] > 4) {
+            return false;
+        }
+    }
+
+    return true;
 }
 function generarAutomata() {
     let cadena = document.getElementById('cadena').value;
