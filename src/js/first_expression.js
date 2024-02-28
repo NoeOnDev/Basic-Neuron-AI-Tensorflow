@@ -29,9 +29,12 @@ function generarAutomata() {
     let transiciones = [];
 
     if (!esValida(cadena)) {
+        d3.select("#automata").selectAll("*").remove();
         alert('La cadena no es válida');
         return;
     }
+
+    d3.select("#automata").style("display", "block");
 
     for (let i = 0; i <= cadena.length; i++) {
         estados.push({id: 'q' + i, x: 100 + 200 * i, y: 40, inicial: i === 0, final: i === cadena.length});
