@@ -1,26 +1,31 @@
 // Expresión regular numero #2
 function esValida(cadena) {
-    let estadoActual = 'q0';
-    const transiciones = {
-        'q0': {'r': 'q1', 'R': 'q1'},
-        'q1': {'o': 'q2', 'm': 'q3', 'n': 'q4', 'O': 'q2', 'M': 'q3', 'N': 'q4'},
-        'q2': {'m': 'q3', 'n': 'q4', 'M': 'q3', 'N': 'q4'},
-        'q3': {'o': 'q2', 'n': 'q4', 'O': 'q2', 'N': 'q4'},
-        'q4': {'o': 'q2', 'm': 'q3', 'O': 'q2', 'M': 'q3'},
-        'qe': {}
-    };
+    if (cadena.length !== 4) {
+        return false;
+    }
 
-    for (let i = 0; i < cadena.length; i++) {
-        const caracter = cadena[i];
-        if (transiciones[estadoActual] && transiciones[estadoActual][caracter]) {
-            estadoActual = transiciones[estadoActual][caracter];
+    if (cadena[0] !== 'R' && cadena[0] !== 'r') {
+        return false;
+    }
+
+    let oCount = 0;
+    let mCount = 0;
+    let nCount = 0;
+
+    for (let i = 1; i < cadena.length; i++) {
+        const caracter = cadena[i].toLowerCase();
+        if (caracter === 'o') {
+            oCount++;
+        } else if (caracter === 'm') {
+            mCount++;
+        } else if (caracter === 'n') {
+            nCount++;
         } else {
             return false;
         }
     }
 
-    const estadosFinales = {'q2': true, 'q3': true, 'q4': true};
-    return !!estadosFinales[estadoActual];
+    return oCount === 1 && mCount === 1 && nCount === 1;
 }
 
 function generarAutomata() {
@@ -31,6 +36,7 @@ function generarAutomata() {
     if (!esValida(cadena)) {
         d3.select("#automata").selectAll("*").remove();
         alert('La cadena no es válida');
+        document.getElementById('cadena').value = '';
         return;
     }
 

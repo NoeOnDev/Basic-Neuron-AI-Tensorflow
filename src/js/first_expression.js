@@ -31,6 +31,7 @@ function generarAutomata() {
     if (!esValida(cadena)) {
         d3.select("#automata").selectAll("*").remove();
         alert('La cadena no es válida');
+        document.getElementById('cadena').value = '';
         return;
     }
 
