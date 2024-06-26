@@ -2,8 +2,6 @@ import os
 import shutil
 import pandas as pd
 import numpy as np
-import tensorflow as tf
-from d2l import tensorflow as d2l
 from graficas import plot_evolucion_error, plot_comparacion_y, plot_evolucion_pesos
 
 def recrear_directorios():
@@ -26,52 +24,60 @@ def cargar_datos(ruta_archivo):
 
     return x, y
 
-class LinearRegression(tf.keras.Model):
-    def __init__(self):
-        super(LinearRegression, self).__init__()
-        self.dense = tf.keras.layers.Dense(1, kernel_initializer=tf.random_normal_initializer())
+def predecir(x, w, b):
+    return np.dot(x, w) + b
 
-    def call(self, inputs):
-        return self.dense(inputs)
+def error_cuadratico_medio(y_verdadero, y_predicho):
+    return np.mean((y_verdadero - y_predicho) ** 2)
+
+def entrenar(x, y, w, b, tasa_aprendizaje, epocas):
+    m = x.shape[0]
+    historial_costos = []
+    historial_pesos = []
+
+    for epoca in range(epocas):
+        y_predicho = predecir(x, w, b)
+        
+        error = y_predicho - y
+        
+        dw = (2/m) * np.dot(x.T, error)
+        db = (2/m) * np.sum(error)
+        
+        w -= tasa_aprendizaje * dw
+        b -= tasa_aprendizaje * db
+        
+        costo = error_cuadratico_medio(y, y_predicho)
+        
+        print(f"Época {epoca} - Costo: {costo}")
+        print(f"Pesos: {w}")
+        print(f"Sesgo: {b}")
+        
+        if np.isnan(costo) or np.isinf(costo):
+            print("Error: Costo no válido (NaN o infinito). Deteniendo el entrenamiento.")
+            break
+        
+        historial_costos.append(costo)
+        historial_pesos.append(np.append(w, b))
+        
+        if epoca == 0 or epoca == epocas // 2 or epoca == epocas - 1:
+            plot_comparacion_y(y, y_predicho, epoca)
+    
+    return w, b, historial_costos, historial_pesos
 
 def ejecutar_entrenamiento(ruta_archivo, tasa_aprendizaje, epocas):
     recrear_directorios()
     x, y = cargar_datos(ruta_archivo)
-    
-    model = LinearRegression()
-    optimizer = tf.keras.optimizers.SGD(learning_rate=tasa_aprendizaje)
-    loss_object = tf.keras.losses.MeanSquaredError()
 
-    train_dataset = tf.data.Dataset.from_tensor_slices((x, y)).shuffle(len(x)).batch(32)
-    
-    historial_costos = []
-    historial_pesos = []
+    np.random.seed(0)
+    w = np.random.rand(4)
+    b = np.random.rand()
 
-    for epoch in range(epocas):
-        for features, labels in train_dataset:
-            with tf.GradientTape() as tape:
-                predictions = model(features)
-                loss = loss_object(labels, predictions)
-            gradients = tape.gradient(loss, model.trainable_variables)
-            optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+    w, b, historial_costos, historial_pesos = entrenar(x, y, w, b, tasa_aprendizaje, epocas)
 
-        y_predicho = model(x).numpy().flatten()
-        costo = np.mean((y - y_predicho) ** 2)
-        
-        print(f"Época {epoch} - Costo: {costo}")
-        print(f"Pesos: {model.trainable_variables[0].numpy().flatten()}")
-        print(f"Sesgo: {model.trainable_variables[1].numpy().flatten()}")
-
-        historial_costos.append(costo)
-        historial_pesos.append(np.append(model.trainable_variables[0].numpy().flatten(), model.trainable_variables[1].numpy().flatten()))
-
-        if epoch == 0 or epoch == epocas // 2 or epoch == epocas - 1:
-            plot_comparacion_y(y, y_predicho, epoch)
-
-    y_predicho = model(x).numpy().flatten()
-    costo_final = np.mean((y - y_predicho) ** 2)
+    y_predicho = predecir(x, w, b)
+    costo_final = error_cuadratico_medio(y, y_predicho)
 
     plot_evolucion_error(epocas, historial_costos)
     plot_evolucion_pesos(epocas, historial_pesos)
     
-    return model.trainable_variables[0].numpy().flatten(), model.trainable_variables[1].numpy().flatten(), costo_final
+    return w, b, costo_final
