@@ -11,7 +11,7 @@ def recrear_directorios():
         if os.path.exists(directorio):
             shutil.rmtree(directorio)
         os.makedirs(directorio)
-        
+
 def cargar_datos(ruta_archivo):
     conjunto_datos = pd.read_csv(ruta_archivo)
     x = conjunto_datos[['x1', 'x2', 'x3', 'x4']].values
@@ -22,12 +22,18 @@ def crear_modelo():
     modelo = tf.keras.Sequential([
         tf.keras.layers.Dense(1, input_shape=(4,), activation='linear')
     ])
-    modelo.compile(optimizer='adam', loss='mean_squared_error')
     return modelo
 
 def entrenar_modelo(modelo, x, y, epocas):
-    historial = modelo.fit(x, y, epochs=epocas)
-    return historial
+    historial_pesos = []
+    
+    class PesosCallback(tf.keras.callbacks.Callback):
+        def on_epoch_end(self, epoch, logs=None):
+            pesos, sesgo = modelo.layers[0].get_weights()
+            historial_pesos.append(np.append(pesos.flatten(), sesgo))
+    
+    historial = modelo.fit(x, y, epochs=epocas, callbacks=[PesosCallback()])
+    return historial, historial_pesos
 
 def ejecutar_entrenamiento(ruta_archivo, tasa_aprendizaje, epocas):
     recrear_directorios()
@@ -38,12 +44,14 @@ def ejecutar_entrenamiento(ruta_archivo, tasa_aprendizaje, epocas):
     opt = tf.keras.optimizers.Adam(learning_rate=tasa_aprendizaje)
     modelo.compile(optimizer=opt, loss='mean_squared_error')
     
-    historial = entrenar_modelo(modelo, x, y, epocas)
+    historial, historial_pesos = entrenar_modelo(modelo, x, y, epocas)
     
     historial_costos = historial.history['loss']
     y_predicho = modelo.predict(x)
-
+    
     plot_evolucion_error(epocas, historial_costos)
+    plot_comparacion_y(y, y_predicho, epocas - 1)
+    plot_evolucion_pesos(epocas, historial_pesos)
     
     pesos = modelo.layers[0].get_weights()[0].flatten()
     sesgo = modelo.layers[0].get_weights()[1].flatten()[0]
