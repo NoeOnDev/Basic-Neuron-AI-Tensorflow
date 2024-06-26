@@ -44,18 +44,16 @@ def ejecutar_entrenamiento(ruta_archivo, tasa_aprendizaje, epocas):
     opt = tf.keras.optimizers.Adam(learning_rate=tasa_aprendizaje)
     modelo.compile(optimizer=opt, loss='mean_squared_error')
     
-    historial, historial_pesos, predicciones_por_epoca = entrenar_modelo(modelo, x, y, epocas)
+    historial, historial_pesos = entrenar_modelo(modelo, x, y, epocas)
     
     historial_costos = historial.history['loss']
+    y_predicho = modelo.predict(x)
     
     plot_evolucion_error(epocas, historial_costos)
-    plot_comparacion_y(y, predicciones_por_epoca[0], 0)
-    plot_comparacion_y(y, predicciones_por_epoca[epocas // 2], epocas // 2)
-    plot_comparacion_y(y, predicciones_por_epoca[-1], epocas - 1)
+    plot_comparacion_y(y, y_predicho, epocas - 1)
     plot_evolucion_pesos(epocas, historial_pesos)
     
     pesos = modelo.layers[0].get_weights()[0].flatten()
     sesgo = modelo.layers[0].get_weights()[1].flatten()[0]
     
     return pesos, sesgo, historial_costos[-1]
-
