@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# Graficas
+grafica_evolucion_error/
+grafica_evolucion_pesos/
+graficas_epocas/
+
 # Distribution / packaging
 .Python
 build/
