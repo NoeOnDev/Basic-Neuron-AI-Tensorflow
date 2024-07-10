@@ -1,3 +1,4 @@
+# Actividad 3.5 - Implementación de un modelo de regresión lineal con TensorFlow
 import os
 import shutil
 import pandas as pd
@@ -20,7 +21,7 @@ def cargar_datos(ruta_archivo):
 
 def crear_modelo():
     modelo = tf.keras.Sequential([
-        tf.keras.layers.Dense(2, input_shape=(4,), activation='linear')
+        tf.keras.layers.Dense(1, input_shape=(4,), activation='linear')
     ])
     return modelo
 
@@ -50,8 +51,8 @@ def ejecutar_entrenamiento(ruta_archivo, tasa_aprendizaje, epocas):
     y_predicho = modelo.predict(x)
     
     plot_evolucion_error(epocas, historial_costos)
-    plot_comparacion_y(y, y_predicho, 0)
-    plot_comparacion_y(y, y_predicho, epocas - 1)
+    plot_comparacion_y(y, y_predicho, 1)
+    plot_comparacion_y(y, y_predicho, epocas)
     plot_evolucion_pesos(epocas, historial_pesos)
 
     pesos = modelo.layers[0].get_weights()[0].flatten()
