@@ -51,7 +51,6 @@ def ejecutar_entrenamiento(ruta_archivo, tasa_aprendizaje, epocas):
     y_predicho = modelo.predict(x)
     
     plot_evolucion_error(epocas, historial_costos)
-    plot_comparacion_y(y, y_predicho, 1)
     plot_comparacion_y(y, y_predicho, epocas)
     plot_evolucion_pesos(epocas, historial_pesos)
 
