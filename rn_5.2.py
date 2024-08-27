@@ -1,9 +1,10 @@
 # Actividad 5.2 
-from tensorflow.keras import layers, models, optimizers, losses
+from tensorflow.keras import layers, models, optimizers, losses, Input
 from d2l import tensorflow as d2l
 
 model = models.Sequential([
-    layers.Flatten(input_shape=(28, 28)),
+    Input(shape=(28, 28)),
+    layers.Flatten(),
     layers.Dense(256, activation='relu'),
     layers.Dense(10)
 ])
