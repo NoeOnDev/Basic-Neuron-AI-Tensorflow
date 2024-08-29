@@ -1,4 +1,3 @@
-# Actividad 5.2 
 from tensorflow.keras import layers, models, optimizers, losses, Input
 from d2l import tensorflow as d2l
 
